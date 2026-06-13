@@ -424,6 +424,16 @@ void PopupView::updateGeometry()
         movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()), m_globalPos.y());
     }
 
+    if (viewRect.bottom() > anchorRect.bottom()) {
+        // move up to an area that doesn't fit
+        movePos(m_globalPos.x(), m_globalPos.y() + anchorRect.bottom() - viewRect.bottom());
+    }
+
+    if (viewRect.top() < anchorRect.top()) {
+        // move down to an area that doesn't fit
+        movePos(m_globalPos.x(), m_globalPos.y() - (viewRect.top() - anchorRect.top()));
+    }
+
     if (!showArrow()) {
         if (popupPosition() == PopupPosition::Bottom || popupPosition() == PopupPosition::Top) {
             movePos(m_globalPos.x() - padding(), m_globalPos.y());
