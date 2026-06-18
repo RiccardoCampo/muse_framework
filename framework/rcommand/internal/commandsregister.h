@@ -29,11 +29,17 @@ class CommandsRegister : public ICommandsRegister
 public:
     CommandsRegister() = default;
 
-    void reg(const IModuleCommandsPtr& module) override;
-    void unreg(const IModuleCommandsPtr& module) override;
+    void reg(const IModuleCommandsRegisterPtr& module) override;
+    void unreg(const IModuleCommandsRegisterPtr& module) override;
+    IModuleCommandsRegisterPtr moduleRegister(const std::string& moduleName) const override;
+
     std::vector<CommandInfo> commandList() const override;
 
+    const std::string& commandModuleName(const Command& command) const override;
+
 private:
-    std::map<std::string, IModuleCommandsPtr> m_modules;
+    std::map<std::string, IModuleCommandsRegisterPtr> m_modules;
+
+    std::map<Command, std::string> m_commandModuleNames;
 };
 }

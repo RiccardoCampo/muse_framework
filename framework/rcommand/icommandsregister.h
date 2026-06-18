@@ -20,7 +20,9 @@
 #pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "imodulecommands.h"
+
+#include "imodulecommandsregister.h"
+#include "commandtypes.h"
 
 namespace muse::rcommand {
 class ICommandsRegister : MODULE_GLOBAL_INTERFACE
@@ -29,9 +31,12 @@ class ICommandsRegister : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~ICommandsRegister() = default;
 
-    virtual void reg(const IModuleCommandsPtr& module) = 0;
-    virtual void unreg(const IModuleCommandsPtr& module) = 0;
+    virtual void reg(const IModuleCommandsRegisterPtr& module) = 0;
+    virtual void unreg(const IModuleCommandsRegisterPtr& module) = 0;
+    virtual IModuleCommandsRegisterPtr moduleRegister(const std::string& moduleName) const = 0;
 
     virtual std::vector<CommandInfo> commandList() const = 0;
+
+    virtual const std::string& commandModuleName(const Command& command) const = 0;
 };
 }

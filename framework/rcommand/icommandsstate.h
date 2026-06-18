@@ -19,26 +19,25 @@
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleinterface.h"
+
+#include "global/async/channel.h"
+
+#include "imodulecommandsstate.h"
+#include "commandtypes.h"
 
 namespace muse::rcommand {
-class RCommandModule : public modularity::IModuleSetup
+class ICommandsState : MODULE_CONTEXT_INTERFACE
 {
+    INTERFACE_ID(ICommandsState);
+
 public:
-    std::string moduleName() const override;
+    virtual ~ICommandsState() = default;
 
-    void registerExports() override;
-    void resolveImports() override;
+    virtual void reg(const IModuleCommandsStatePtr& module) = 0;
+    virtual void unreg(const IModuleCommandsStatePtr& module) = 0;
 
-    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
-};
-
-class RCommandContext : public modularity::IContextSetup
-{
-public:
-    RCommandContext(const muse::modularity::ContextPtr& ctx)
-        : modularity::IContextSetup(ctx) {}
-
-    void registerExports() override;
+    virtual CommandState commandState(const Command& command) const = 0;
+    virtual async::Channel<Command, CommandState> commandStateChanged() const = 0;
 };
 }
